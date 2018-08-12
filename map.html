@@ -1,0 +1,424 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>旅游景点|境内旅游-旅游景点旅行社网站</title>
+<meta name="renderer" content="webkit">
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="applicable-device" content="pc,mobile">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui"
+<meta name="description" content="" />
+<meta name="keywords" content="旅游景点|境内旅游" />
+
+<style type="text/css">
+ 	*{
+ 		margin: 0;
+ 		padding: 0;
+ 	}
+ 	ul{
+ 	list-style: none;
+ 	}
+ 	#container{
+ 		width:100%; 
+ 		height: 100%; 
+ 		position: absolute;
+ 		right: 0;
+ 		bottom: 0;
+ 		
+ 	}
+ 	.map-main{
+ 		background: #FFFFFF;
+ 		z-index:999;
+ 		position: absolute;
+ 		padding: 10px;
+ 		top: 80px;
+ 		left: 10px;
+ 		border-radius:5px;
+ 		box-shadow: 0px 15px 30px rgba(0,0,0,0.3);
+ 	}
+ 	
+ 	/*.map-mode{
+ 		box-shadow: 0px 15px 10px rgba(0,0,0,0.3);
+ 	}*/
+ 	.map-mode{
+ 		height: 40px;
+ 	}
+ 	.map-mode>li{
+            list-style: none;
+            width: 33%;
+            height: 40px;
+            text-align: center;
+            line-height: 40px;
+            float: left;
+            border-bottom: 1px solid #c0c0c0;
+            margin: 0 0 10px 0;
+        }
+        .map-mode>.map-current{
+            background: #f0f0f0;
+            border-bottom: 0px;
+        }
+        .map-content>li{
+            list-style: none;
+            display: none;
+        }
+        .map-content>.map-show{
+            display: block;
+        }
+        
+        .work{
+        	width: 100%;
+        	
+        	background-color: aquamarine;
+        }
+        .recommend{
+        	margin: 5px;
+        	border-bottom: 1px solid #f0f0f0;
+ 			height: 80px;
+        }
+ 		.recommend-font{
+ 			width: 50%;
+ 			float: left;
+ 			letter-spacing:0px;
+ 			line-height: 15px;
+ 			
+ 		}.recommend-img{
+ 			width: 50%;
+ 			float: right;
+ 			position: relative;
+ 		}.recommend-img img{
+ 			right: 0px;
+ 			
+ 			width: 80px;
+ 			height: 70px;
+ 			float: right;
+ 			position: absolute;
+ 		}
+ 		.paging-current{
+ 			height: 20px;
+ 			border: 1px solid #000;
+ 		}
+ 		.map-btn{
+ 			display:block;
+ 			margin: 20px auto;
+ 			color: #FFFFFF;
+ 			background-color: #47A447;
+ 		}
+ 	
+  </style>
+<link rel='stylesheet' href='./static/css/style.css'>
+<link rel="stylesheet" href="https://cache.amap.com/lbs/static/main1119.css"/>
+<script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.8&key=0f3ed012ac3fff1585bc9aca91462875"></script> 
+</head> 
+<body>
+<!--[if lte IE 8]>
+  <div class="text-center padding-top-50 padding-bottom-50 bg-blue-grey-100">
+  <p class="browserupgrade font-size-18">你正在使用一个<strong>过时</strong>的浏览器。请<a href="http://browsehappy.com/" target="_blank">升级您的浏览器</a>，以提高您的体验。</p>
+  </div>
+<![endif]-->
+<div class="load-box"></div>
+
+<nav>
+  <div class="nav-box">
+    <div class="width-box">
+      <div class="nav-cut">
+        <ul class="nav-ul">
+
+          <li class="nav-li "><a href="index.html" title="第十六届大学生软件设计大赛"><img src="./static/image/1506052119.png" alt="logo"></a></li>
+
+          <li class="nav-li active navs margin-left-"><a href="you.html" title="热门景点" >热门景点</a></li>
+
+          <li class="nav-li  navs margin-left-"><a href="map.html" title="地图" class="a_bg">地图</a></li>
+
+          <li class="nav-li  navs margin-left-"><a href="you.html" title="示例" >示例</a></li>
+
+          <li class="nav-li  navs margin-left-"><a href="you.html" title="示例" >示例</a></li>
+
+          <li class="nav-li   margin-left-"><a href="you.html" title="示例" >示例</a></li>
+
+          <li class="nav-li   margin-left-"><a href="gonglue.html" title="攻略" >攻略</a></li>
+
+          <li class="nav-li   margin-left-"><a href="gonglue.html" title="交通" >交通</a></li>
+
+        </ul>
+      </div>
+
+      	<div class="search-cut">
+        	<div class="login-box">
+  					<a href="login.html">登录</a>
+ 						<a href="register.html">注册</a>
+					</div>
+        	<!--<div class="search-box">
+ 								<div class="search-button">
+        	
+        				</div>
+          <form method="get" action="gonglue.html">
+        		<input type="hidden" name="lang" value="cn">
+
+      			<input type="hidden" name="class1" value="10001">
+
+            <input type="text" placeholder="请输入搜索城市或景点！" name="searchword" value="">
+            <button type="submit"></button>
+          </form>
+
+        </div>-->
+      </div>
+    </div>
+  </div>
+</nav>
+
+
+<section>
+	<div id='container'></div>
+	<div id="tip"></div>
+	<header class="map-main">
+		<ul>
+			<li>
+				<input id="map-origin" type="text" required class="form-control" style="float: left;" placeholder="我的位置"/>
+				<img style="float: right;" src="static/image/geek_4.png"/>
+			</li>
+			<li>
+				<input id="map-destination" type="text" required class="form-control" placeholder="输入终点"/>
+			</li>
+		</ul>
+	   
+		<div class="map-box transform-box">
+    		<ul class="map-mode">
+        		<li class="map-current">步行</li>
+        		<li>骑行</li>
+        		<li>自驾</li>	
+    		</ul>
+   			 <ul class="map-content">
+        		<li class="map-show">
+        			<div class="walk">
+        				<div class="recommend">
+        					<div class="recommend-font">
+        						<p>推荐线路<span>1</span></p>
+        						<p><span>★★★★☆</span></p>
+        						<p>泰山又名岱山</p>
+        					</div>
+        					<div class="recommend-img">
+        						<img  src="static/image/1506321389.jpg"/>
+        					</div>
+        				</div>
+        				<div class="recommend">
+        					<div class="recommend-font">
+        						<p>推荐线路<span>2</span></p>
+        						<p><span>★★★★☆</span></p>
+        						<p>泰山又名岱山</p>
+        					</div>
+        					<div class="recommend-img">
+        						<img  src="static/image/1506321389.jpg"/>
+        					</div>
+        				</div>
+        				<div class="recommend">
+        					<div class="recommend-font">
+        						<p>推荐线路<span>3</span></p>
+        						<p><span>★★★★☆</span></p>
+        						<p>泰山又名岱山</p>
+        					</div>
+        					<div class="recommend-img">
+        						<img  src="static/image/1506321389.jpg"/>
+        					</div>
+        				</div>
+        				<div class="recommend">
+        					<div class="recommend-font">
+        						<p>推荐线路<span>4</span></p>
+        						<p><span>★★★★☆</span></p>
+        						<p>泰山又名岱山</p>
+        					</div>
+        					<div class="recommend-img">
+        						<img  src="static/image/1506321389.jpg"/>
+        					</div>
+        				</div>
+        				
+        					
+        					
+        				<div class="paging-current"></div>
+        				<div >
+        					<button class="map-btn btn-lg" type="button">我要探索新道路</button>
+        				</div>
+        				
+        				
+        				
+        				
+        				
+        				
+        				
+        				
+        				
+        				
+        			</div>
+        		</li>
+        		<li>
+        			<div class="riding">	
+        				<div class="recommend">
+        					<div class="recommend-font">
+        						<p>推荐线路<span>1</span></p>
+        						<p><span>★★★★☆</span></p>
+        						<p>泰山又名岱山</p>
+        					</div>
+        					<div class="recommend-img">
+        						<img  src="static/image/1506319633.jpg"/>
+        					</div>
+        				</div>
+        				<div class="recommend">
+        					<div class="recommend-font">
+        						<p>推荐线路<span>2</span></p>
+        						<p><span>★★★★☆</span></p>
+        						<p>泰山又名岱山</p>
+        					</div>
+        					<div class="recommend-img">
+        						<img  src="static/image/1506321153.jpg"/>
+        					</div>
+        				</div>
+        				<div class="recommend">
+        					<div class="recommend-font">
+        						<p>推荐线路<span>3</span></p>
+        						<p><span>★★★★☆</span></p>
+        						<p>泰山又名岱山</p>
+        					</div>
+        					<div class="recommend-img">
+        						<img  src="static/image/1506321389.jpg"/>
+        					</div>
+        				</div>
+        				<div class="recommend">
+        					<div class="recommend-font">
+        						<p>推荐线路<span>4</span></p>
+        						<p><span>★★★★☆</span></p>
+        						<p>泰山又名岱山</p>
+        					</div>
+        					<div class="recommend-img">
+        						<img  src="static/image/1506321389.jpg"/>
+        					</div>
+        				</div>
+        				
+        					
+        					
+        				<div class="paging-current"></div>
+        				<div >
+        					<button class="map-btn btn-lg" type="button">我要探索新道路</button>
+        				</div>
+        				
+        			</div>
+        		</li>
+        		<li>
+        			<div class="self-driving">	
+        				<div class="recommend">
+        					<div class="recommend-font">
+        						<p>推荐线路<span>1</span></p>
+        						<p><span>★★★★☆</span></p>
+        						<p>泰山又名岱山</p>
+        					</div>
+        					<div class="recommend-img">
+        						<img  src="static/image/1506321389.jpg"/>
+        					</div>
+        				</div>
+        				<div class="recommend">
+        					<div class="recommend-font">
+        						<p>推荐线路<span>2</span></p>
+        						<p><span>★★★★☆</span></p>
+        						<p>泰山又名岱山</p>
+        					</div>
+        					<div class="recommend-img">
+        						<img  src="static/image/1506321389.jpg"/>
+        					</div>
+        				</div>
+        				<div class="recommend">
+        					<div class="recommend-font">
+        						<p>推荐线路<span>3</span></p>
+        						<p><span>★★★★☆</span></p>
+        						<p>泰山又名岱山</p>
+        					</div>
+        					<div class="recommend-img">
+        						<img  src="static/image/1506321389.jpg"/>
+        					</div>
+        				</div>
+        				<div class="recommend">
+        					<div class="recommend-font">
+        						<p>推荐线路<span>4</span></p>
+        						<p><span>★★★★☆</span></p>
+        						<p>泰山又名岱山</p>
+        					</div>
+        					<div class="recommend-img">
+        						<img  src="static/image/1506321389.jpg"/>
+        					</div>
+        				</div>
+        				
+        					
+        					
+        				<div class="paging-current"></div>
+        				<div >
+        					<button class="map-btn btn-lg" type="button">我要探索新道路</button>
+        				</div>
+        				
+        			</div>
+        		</li>
+        		
+    		</ul>
+    	</div>
+    		
+	  
+		
+		
+		
+		
+	
+	</header>
+
+
+
+
+</section>
+
+
+
+
+
+
+
+
+<script src="js/jquery-1.12.4.js"></script>
+<script src="./static/js/shop_lang_cn.js"></script>
+<script src="./static/js/style.js"></script>
+<script src="./static/js/shop_v3.js?20171025163800"></script>
+<script src="./static/js/map.js?20171025163800"></script>
+<!--<script type="text/javascript" src="https://cache.amap.com/lbs/static/addToolbar.js"></script>-->
+<script>
+	$(function () {
+            
+            // 1.监听选项卡的移入事件
+            $(".map-mode>li").click(function () {
+                // 1.1修改被移入选项卡的背景颜色
+                $(this).addClass("map-current");
+                // 1.2还原其它兄弟选项卡的背景颜色
+                $(this).siblings().removeClass("map-current");
+                // 1.3获取当前移出选项卡的索引
+                var index = $(this).index();
+                // 1.4根据索引找到对应的图片
+                var $li = $(".map-content>li").eq(index);
+                // 1.5隐藏非当前的其它图片
+                $li.siblings().removeClass("map-show");
+                // 1.6显示对应的图片
+                $li.addClass("map-show");
+            });
+           
+//          if($("#map-origin").innerHTML==undefined||$("#map-destination").innerHTML==undefined){
+//          	$(".map-box").hide(1000);
+//          }
+//          else{
+//          	$(".map-box").show(1000);
+//          }
+         
+            
+            
+        });
+
+	
+</script>
+	
+
+
+</body>
+</html>
+
