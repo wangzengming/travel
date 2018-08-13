@@ -106,10 +106,9 @@
  			background-color: #47A447;
  		}
  	
+ 	
   </style>
 <link rel='stylesheet' href='./static/css/style.css'>
-<link rel="stylesheet" href="https://cache.amap.com/lbs/static/main1119.css"/>
-<script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.8&key=0f3ed012ac3fff1585bc9aca91462875"></script> 
 </head> 
 <body>
 <!--[if lte IE 8]>
@@ -170,8 +169,8 @@
 
 
 <section>
-	<div id='container tipinput'></div>
-	<div id="tip"></div>
+	<div id="container"></div> <!--加载地图-->
+	
 	<header class="map-main">
 		<table>
         <tr>
@@ -185,7 +184,7 @@
             </td>
         </tr>
    		</table>
-	   
+
 		<div class="map-box transform-box">
     		<ul class="map-mode">
         		<li class="map-current">步行</li>
@@ -361,19 +360,33 @@
         		
     		</ul>
     	</div>
-    		
-	  
+
+		
+
+
+
+
+
+
 		
 		
-		
-		
-	
 	</header>
-
-
-
-
 </section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -446,7 +459,8 @@
     function onError(data) {
         document.getElementById('tip').innerHTML = '定位失败';
     }
-
+    
+    
     
     
     //输入提示并搜索
