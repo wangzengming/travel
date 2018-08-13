@@ -25,12 +25,12 @@
  		position: absolute;
  		right: 0;
  		bottom: 0;
+ 		z-index:0;
  		
  	}
  	.map-main{
-
  		background: #FFFFFF;
- 		z-index:999;
+ 		
  		position: absolute;
  		padding: 10px;
  		top: 80px;
@@ -39,34 +39,76 @@
  		box-shadow: 0px 15px 30px rgba(0,0,0,0.3);
  	}
  	
- 	
+ 	/*.map-mode{
+ 		box-shadow: 0px 15px 10px rgba(0,0,0,0.3);
+ 	}*/
+ 	.map-mode{
+ 		height: 40px;
+ 	}
  	.map-mode>li{
             list-style: none;
-            
+            width: 33%;
             height: 40px;
             text-align: center;
             line-height: 40px;
             float: left;
-            border-bottom: 1px solid #A1A1A1;
+            border-bottom: 1px solid #c0c0c0;
             margin: 0 0 10px 0;
         }
         .map-mode>.map-current{
             background: #f0f0f0;
-            border-bottom: 0px solid #A1A1A1;
+            border-bottom: 0px;
         }
-        .content>li{
+        .map-content>li{
             list-style: none;
             display: none;
         }
-        .content>.show{
+        .map-content>.map-show{
             display: block;
         }
- 	
+        
+        .work{
+        	width: 100%;
+        	
+        	background-color: aquamarine;
+        }
+        .recommend{
+        	margin: 5px;
+        	border-bottom: 1px solid #f0f0f0;
+ 			height: 80px;
+        }
+ 		.recommend-font{
+ 			width: 50%;
+ 			float: left;
+ 			letter-spacing:0px;
+ 			line-height: 15px;
+ 			
+ 		}.recommend-img{
+ 			width: 50%;
+ 			float: right;
+ 			position: relative;
+ 		}.recommend-img img{
+ 			right: 0px;
+ 			
+ 			width: 80px;
+ 			height: 70px;
+ 			float: right;
+ 			position: absolute;
+ 		}
+ 		.paging-current{
+ 			height: 20px;
+ 			border: 1px solid #000;
+ 		}
+ 		.map-btn{
+ 			display:block;
+ 			margin: 20px auto;
+ 			color: #FFFFFF;
+ 			background-color: #47A447;
+ 		}
  	
  	
   </style>
 <link rel='stylesheet' href='./static/css/style.css'>
-<script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.8&key=0f3ed012ac3fff1585bc9aca91462875"></script> 
 </head> 
 <body>
 <!--[if lte IE 8]>
@@ -127,32 +169,208 @@
 
 
 <section>
-	<div id="container"></div> 
+	<div id="container"></div> <!--加载地图-->
+	
 	<header class="map-main">
-		<ul>
-			<li>
-				<input type="text" required class="form-control" placeholder="我的位置"/>
-			</li>
-			<li>
-				<input type="text" required class="form-control" placeholder="输入终点"/>
-			</li>
-		</ul>
+		<table>
+        <tr>
+            <td>
+                <input id="tipinput1" class="form-control" placeholder="我的位置"/>
+            </td> 
+        </tr>
+        <tr>
+        	<td>
+                <input id="tipinput2" class="form-control" placeholder="输入终点"/>
+            </td>
+        </tr>
+   		</table>
+
+		<div class="map-box transform-box">
+    		<ul class="map-mode">
+        		<li class="map-current">步行</li>
+        		<li>骑行</li>
+        		<li>自驾</li>	
+    		</ul>
+   			 <ul class="map-content">
+        		<li class="map-show">
+        			<div class="walk">
+        				<div class="recommend">
+        					<div class="recommend-font">
+        						<p>推荐线路<span>1</span></p>
+        						<p><span>★★★★☆</span></p>
+        						<p>泰山又名岱山</p>
+        					</div>
+        					<div class="recommend-img">
+        						<img  src="static/image/1506321389.jpg"/>
+        					</div>
+        				</div>
+        				<div class="recommend">
+        					<div class="recommend-font">
+        						<p>推荐线路<span>2</span></p>
+        						<p><span>★★★★☆</span></p>
+        						<p>泰山又名岱山</p>
+        					</div>
+        					<div class="recommend-img">
+        						<img  src="static/image/1506321389.jpg"/>
+        					</div>
+        				</div>
+        				<div class="recommend">
+        					<div class="recommend-font">
+        						<p>推荐线路<span>3</span></p>
+        						<p><span>★★★★☆</span></p>
+        						<p>泰山又名岱山</p>
+        					</div>
+        					<div class="recommend-img">
+        						<img  src="static/image/1506321389.jpg"/>
+        					</div>
+        				</div>
+        				<div class="recommend">
+        					<div class="recommend-font">
+        						<p>推荐线路<span>4</span></p>
+        						<p><span>★★★★☆</span></p>
+        						<p>泰山又名岱山</p>
+        					</div>
+        					<div class="recommend-img">
+        						<img  src="static/image/1506321389.jpg"/>
+        					</div>
+        				</div>
+        				
+        					
+        					
+        				<div class="paging-current"></div>
+        				<div >
+        					<button class="map-btn btn-lg" type="button">我要探索新道路</button>
+        				</div>
+        				
+        				
+        				
+        				
+        				
+        				
+        				
+        				
+        				
+        				
+        			</div>
+        		</li>
+        		<li>
+        			<div class="riding">	
+        				<div class="recommend">
+        					<div class="recommend-font">
+        						<p>推荐线路<span>1</span></p>
+        						<p><span>★★★★☆</span></p>
+        						<p>泰山又名岱山</p>
+        					</div>
+        					<div class="recommend-img">
+        						<img  src="static/image/1506319633.jpg"/>
+        					</div>
+        				</div>
+        				<div class="recommend">
+        					<div class="recommend-font">
+        						<p>推荐线路<span>2</span></p>
+        						<p><span>★★★★☆</span></p>
+        						<p>泰山又名岱山</p>
+        					</div>
+        					<div class="recommend-img">
+        						<img  src="static/image/1506321153.jpg"/>
+        					</div>
+        				</div>
+        				<div class="recommend">
+        					<div class="recommend-font">
+        						<p>推荐线路<span>3</span></p>
+        						<p><span>★★★★☆</span></p>
+        						<p>泰山又名岱山</p>
+        					</div>
+        					<div class="recommend-img">
+        						<img  src="static/image/1506321389.jpg"/>
+        					</div>
+        				</div>
+        				<div class="recommend">
+        					<div class="recommend-font">
+        						<p>推荐线路<span>4</span></p>
+        						<p><span>★★★★☆</span></p>
+        						<p>泰山又名岱山</p>
+        					</div>
+        					<div class="recommend-img">
+        						<img  src="static/image/1506321389.jpg"/>
+        					</div>
+        				</div>
+        				
+        					
+        					
+        				<div class="paging-current"></div>
+        				<div >
+        					<button class="map-btn btn-lg" type="button">我要探索新道路</button>
+        				</div>
+        				
+        			</div>
+        		</li>
+        		<li>
+        			<div class="self-driving">	
+        				<div class="recommend">
+        					<div class="recommend-font">
+        						<p>推荐线路<span>1</span></p>
+        						<p><span>★★★★☆</span></p>
+        						<p>泰山又名岱山</p>
+        					</div>
+        					<div class="recommend-img">
+        						<img  src="static/image/1506321389.jpg"/>
+        					</div>
+        				</div>
+        				<div class="recommend">
+        					<div class="recommend-font">
+        						<p>推荐线路<span>2</span></p>
+        						<p><span>★★★★☆</span></p>
+        						<p>泰山又名岱山</p>
+        					</div>
+        					<div class="recommend-img">
+        						<img  src="static/image/1506321389.jpg"/>
+        					</div>
+        				</div>
+        				<div class="recommend">
+        					<div class="recommend-font">
+        						<p>推荐线路<span>3</span></p>
+        						<p><span>★★★★☆</span></p>
+        						<p>泰山又名岱山</p>
+        					</div>
+        					<div class="recommend-img">
+        						<img  src="static/image/1506321389.jpg"/>
+        					</div>
+        				</div>
+        				<div class="recommend">
+        					<div class="recommend-font">
+        						<p>推荐线路<span>4</span></p>
+        						<p><span>★★★★☆</span></p>
+        						<p>泰山又名岱山</p>
+        					</div>
+        					<div class="recommend-img">
+        						<img  src="static/image/1506321389.jpg"/>
+        					</div>
+        				</div>
+        				
+        					
+        					
+        				<div class="paging-current"></div>
+        				<div >
+        					<button class="map-btn btn-lg" type="button">我要探索新道路</button>
+        				</div>
+        				
+        			</div>
+        		</li>
+        		
+    		</ul>
+    	</div>
+
 		
-		
-		
-		
-		
-		
-		
-		
-		
+
+
+
+
+
+
 		
 		
 	</header>
-
-
-
-
 </section>
 
 
@@ -175,16 +393,15 @@
 
 
 
-
-<script src="js/jquery-1.12.4.js"></script>
+<script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.8&key=0f3ed012ac3fff1585bc9aca91462875&plugin=AMap.Autocomplete,AMap.PlaceSearch"></script> 
+<script src="./static/js/jquery-1.12.4.js"></script>
 <script src="./static/js/shop_lang_cn.js"></script>
 <script src="./static/js/style.js"></script>
 <script src="./static/js/shop_v3.js?20171025163800"></script>
 <script src="./static/js/map.js?20171025163800"></script>
 <!--<script type="text/javascript" src="https://cache.amap.com/lbs/static/addToolbar.js"></script>-->
-<script>
+<script  type="text/javascript">
 	$(function () {
-            
             // 1.监听选项卡的移入事件
             $(".map-mode>li").mouseenter(function () {
                 // 1.1修改被移入选项卡的背景颜色
@@ -199,10 +416,80 @@
                 $li.siblings().removeClass("map-show");
                 // 1.6显示对应的图片
                 $li.addClass("map-show");
-            });
-        });
-
+            }); 
+	});
 	
+	
+</script>
+<script type="text/javascript">
+    	var map, geolocation;
+    //加载地图，调用浏览器定位服务
+    map = new AMap.Map('container', {
+        resizeEnable: true
+    });
+    	
+    	
+    	
+    	//定位服务
+    map.plugin('AMap.Geolocation', function() {
+        geolocation = new AMap.Geolocation({
+            enableHighAccuracy: true,//是否使用高精度定位，默认:true
+            timeout: 10000,          //超过10秒后停止定位，默认：无穷大
+            buttonOffset: new AMap.Pixel(10, 20),//定位按钮与设置的停靠位置的偏移量，默认：Pixel(10, 20)
+            zoomToAccuracy: true,      //定位成功后调整地图视野范围使定位位置及精度范围视野内可见，默认：false
+            buttonPosition:'RB'
+        });
+        map.addControl(geolocation);
+        geolocation.getCurrentPosition();
+        AMap.event.addListener(geolocation, 'complete', onComplete);//返回定位信息
+        AMap.event.addListener(geolocation, 'error', onError);      //返回定位出错信息
+    });
+    //解析定位结果
+    function onComplete(data) {
+        var str=['定位成功'];
+        str.push('经度：' + data.position.getLng());
+        str.push('纬度：' + data.position.getLat());
+        if(data.accuracy){
+             str.push('精度：' + data.accuracy + ' 米');
+        }//如为IP精确定位结果则没有精度信息
+        str.push('是否经过偏移：' + (data.isConverted ? '是' : '否'));
+        document.getElementById('tip').innerHTML = str.join('<br>');
+    }
+    //解析定位错误信息
+    function onError(data) {
+        document.getElementById('tip').innerHTML = '定位失败';
+    }
+    
+    
+    
+    
+    //输入提示并搜索
+    var autoOptions1 = {
+        input: "tipinput1"
+    };
+    var auto1 = new AMap.Autocomplete(autoOptions1);
+    var placeSearch = new AMap.PlaceSearch({
+        map: map
+    });  //构造地点查询类
+    AMap.event.addListener(auto1, "select", select);//注册监听，当选中某条记录时会触发
+    function select(e) {
+        placeSearch.setCity(e.poi.adcode);
+        placeSearch.search(e.poi.name);  //关键字查询查询
+    }
+    
+    var autoOptions2 = {
+        input: "tipinput2"
+    };
+    var auto2 = new AMap.Autocomplete(autoOptions2);
+    var placeSearch = new AMap.PlaceSearch({
+        map: map
+    });  //构造地点查询类
+    AMap.event.addListener(auto2, "select", select);//注册监听，当选中某条记录时会触发
+    function select(e) {
+        placeSearch.setCity(e.poi.adcode);
+        placeSearch.search(e.poi.name);  //关键字查询查询
+    }
+    
 </script>
 	
 

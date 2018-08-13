@@ -25,11 +25,12 @@
  		position: absolute;
  		right: 0;
  		bottom: 0;
+ 		z-index:0;
  		
  	}
  	.map-main{
  		background: #FFFFFF;
- 		z-index:999;
+ 		
  		position: absolute;
  		padding: 10px;
  		top: 80px;
@@ -169,18 +170,21 @@
 
 
 <section>
-	<div id='container'></div>
+	<div id='container tipinput'></div>
 	<div id="tip"></div>
 	<header class="map-main">
-		<ul>
-			<li>
-				<input id="map-origin" type="text" required class="form-control" style="float: left;" placeholder="我的位置"/>
-				<img style="float: right;" src="static/image/geek_4.png"/>
-			</li>
-			<li>
-				<input id="map-destination" type="text" required class="form-control" placeholder="输入终点"/>
-			</li>
-		</ul>
+		<table>
+        <tr>
+            <td>
+                <input id="tipinput1" class="form-control" placeholder="我的位置"/>
+            </td> 
+        </tr>
+        <tr>
+        	<td>
+                <input id="tipinput2" class="form-control" placeholder="输入终点"/>
+            </td>
+        </tr>
+   		</table>
 	   
 		<div class="map-box transform-box">
     		<ul class="map-mode">
@@ -376,19 +380,17 @@
 
 
 
-
-
-<script src="js/jquery-1.12.4.js"></script>
+<script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.8&key=0f3ed012ac3fff1585bc9aca91462875&plugin=AMap.Autocomplete,AMap.PlaceSearch"></script> 
+<script src="./static/js/jquery-1.12.4.js"></script>
 <script src="./static/js/shop_lang_cn.js"></script>
 <script src="./static/js/style.js"></script>
 <script src="./static/js/shop_v3.js?20171025163800"></script>
 <script src="./static/js/map.js?20171025163800"></script>
 <!--<script type="text/javascript" src="https://cache.amap.com/lbs/static/addToolbar.js"></script>-->
-<script>
+<script  type="text/javascript">
 	$(function () {
-            
             // 1.监听选项卡的移入事件
-            $(".map-mode>li").click(function () {
+            $(".map-mode>li").mouseenter(function () {
                 // 1.1修改被移入选项卡的背景颜色
                 $(this).addClass("map-current");
                 // 1.2还原其它兄弟选项卡的背景颜色
@@ -396,25 +398,84 @@
                 // 1.3获取当前移出选项卡的索引
                 var index = $(this).index();
                 // 1.4根据索引找到对应的图片
-                var $li = $(".map-content>li").eq(index);
+                var $li = $(".content>li").eq(index);
                 // 1.5隐藏非当前的其它图片
                 $li.siblings().removeClass("map-show");
                 // 1.6显示对应的图片
                 $li.addClass("map-show");
-            });
-           
-//          if($("#map-origin").innerHTML==undefined||$("#map-destination").innerHTML==undefined){
-//          	$(".map-box").hide(1000);
-//          }
-//          else{
-//          	$(".map-box").show(1000);
-//          }
-         
-            
-            
-        });
-
+            }); 
+	});
 	
+	
+</script>
+<script type="text/javascript">
+    	var map, geolocation;
+    //加载地图，调用浏览器定位服务
+    map = new AMap.Map('container', {
+        resizeEnable: true
+    });
+    	
+    	
+    	
+    	//定位服务
+    map.plugin('AMap.Geolocation', function() {
+        geolocation = new AMap.Geolocation({
+            enableHighAccuracy: true,//是否使用高精度定位，默认:true
+            timeout: 10000,          //超过10秒后停止定位，默认：无穷大
+            buttonOffset: new AMap.Pixel(10, 20),//定位按钮与设置的停靠位置的偏移量，默认：Pixel(10, 20)
+            zoomToAccuracy: true,      //定位成功后调整地图视野范围使定位位置及精度范围视野内可见，默认：false
+            buttonPosition:'RB'
+        });
+        map.addControl(geolocation);
+        geolocation.getCurrentPosition();
+        AMap.event.addListener(geolocation, 'complete', onComplete);//返回定位信息
+        AMap.event.addListener(geolocation, 'error', onError);      //返回定位出错信息
+    });
+    //解析定位结果
+    function onComplete(data) {
+        var str=['定位成功'];
+        str.push('经度：' + data.position.getLng());
+        str.push('纬度：' + data.position.getLat());
+        if(data.accuracy){
+             str.push('精度：' + data.accuracy + ' 米');
+        }//如为IP精确定位结果则没有精度信息
+        str.push('是否经过偏移：' + (data.isConverted ? '是' : '否'));
+        document.getElementById('tip').innerHTML = str.join('<br>');
+    }
+    //解析定位错误信息
+    function onError(data) {
+        document.getElementById('tip').innerHTML = '定位失败';
+    }
+
+    
+    
+    //输入提示并搜索
+    var autoOptions1 = {
+        input: "tipinput1"
+    };
+    var auto1 = new AMap.Autocomplete(autoOptions1);
+    var placeSearch = new AMap.PlaceSearch({
+        map: map
+    });  //构造地点查询类
+    AMap.event.addListener(auto1, "select", select);//注册监听，当选中某条记录时会触发
+    function select(e) {
+        placeSearch.setCity(e.poi.adcode);
+        placeSearch.search(e.poi.name);  //关键字查询查询
+    }
+    
+    var autoOptions2 = {
+        input: "tipinput2"
+    };
+    var auto2 = new AMap.Autocomplete(autoOptions2);
+    var placeSearch = new AMap.PlaceSearch({
+        map: map
+    });  //构造地点查询类
+    AMap.event.addListener(auto2, "select", select);//注册监听，当选中某条记录时会触发
+    function select(e) {
+        placeSearch.setCity(e.poi.adcode);
+        placeSearch.search(e.poi.name);  //关键字查询查询
+    }
+    
 </script>
 	
 
