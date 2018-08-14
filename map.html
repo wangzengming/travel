@@ -39,6 +39,20 @@
  		box-shadow: 0px 15px 30px rgba(0,0,0,0.3);
  	}
  	
+ 	#map-origin{
+ 		margin-left: 10px;
+ 		width: 20px;
+ 		height: 20px;
+ 		background-color: #54C135;
+ 		border-radius:10px;
+ 	}
+ 	#map-destination{
+ 		margin-left: 10px;
+ 		width: 20px;
+ 		height: 20px;
+ 		background-color: red;
+ 		border-radius:10px;
+ 	}
  	/*.map-mode{
  		box-shadow: 0px 15px 10px rgba(0,0,0,0.3);
  	}*/
@@ -105,7 +119,12 @@
  			color: #FFFFFF;
  			background-color: #47A447;
  		}
- 	
+ 		/*.amap-zoomcontrol{
+ 			position: absolute;
+ 			bottom:50px;
+    		right:20px;
+ 		}
+ 	*/
  	
   </style>
 <link rel='stylesheet' href='./static/css/style.css'>
@@ -175,12 +194,18 @@
 		<table>
         <tr>
             <td>
-                <input id="tipinput1" class="form-control" placeholder="我的位置"/>
+                <input id="tipinput1" class="form-control"  placeholder="我的位置" value=""/>
             </td> 
+            <td>
+            	<input id="map-origin" type="button"/>
+            </td>
         </tr>
         <tr>
         	<td>
-                <input id="tipinput2" class="form-control" placeholder="输入终点"/>
+                <input id="tipinput2" class="form-control" placeholder="输入终点" />
+            </td>
+            <td>
+            	<input id="map-destination" type="button"/>
             </td>
         </tr>
    		</table>
@@ -393,49 +418,59 @@
 
 
 
-<script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.8&key=0f3ed012ac3fff1585bc9aca91462875&plugin=AMap.Autocomplete,AMap.PlaceSearch"></script> 
+<script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.8
+	&key=0f3ed012ac3fff1585bc9aca91462875
+	&plugin=AMap.Autocomplete,AMap.PlaceSearch,AMap.ToolBar"></script> 
 <script src="./static/js/jquery-1.12.4.js"></script>
 <script src="./static/js/shop_lang_cn.js"></script>
 <script src="./static/js/style.js"></script>
 <script src="./static/js/shop_v3.js?20171025163800"></script>
 <script src="./static/js/map.js?20171025163800"></script>
+<!-- UI组件库 1.0 -->
+<script src="//webapi.amap.com/ui/1.0/main.js?v=1.0.11"></script>
 <!--<script type="text/javascript" src="https://cache.amap.com/lbs/static/addToolbar.js"></script>-->
 <script  type="text/javascript">
 	$(function () {
             // 1.监听选项卡的移入事件
-            $(".map-mode>li").mouseenter(function () {
+            $(".map-mode>li").click(function () {
                 // 1.1修改被移入选项卡的背景颜色
-                $(this).addClass("map-current");
+            $(this).addClass("map-current");
                 // 1.2还原其它兄弟选项卡的背景颜色
-                $(this).siblings().removeClass("map-current");
+            $(this).siblings().removeClass("map-current");
                 // 1.3获取当前移出选项卡的索引
-                var index = $(this).index();
+            var index = $(this).index();
                 // 1.4根据索引找到对应的图片
-                var $li = $(".content>li").eq(index);
+            var $li = $(".content>li").eq(index);
                 // 1.5隐藏非当前的其它图片
-                $li.siblings().removeClass("map-show");
+            $li.siblings().removeClass("map-show");
                 // 1.6显示对应的图片
-                $li.addClass("map-show");
+            $li.addClass("map-show");
             }); 
 	});
-	
-	
 </script>
 <script type="text/javascript">
-    	var map, geolocation;
+	
+	var k=0;
+    var map, geolocation;
     //加载地图，调用浏览器定位服务
-    map = new AMap.Map('container', {
+    map = new AMap.Map('container',{
+        zoom: 16,
         resizeEnable: true
     });
     	
     	
     	
+    	
+    	
+
+
+    	
     	//定位服务
-    map.plugin('AMap.Geolocation', function() {
+    map.plugin('AMap.Geolocation', function() {//定位按钮
         geolocation = new AMap.Geolocation({
             enableHighAccuracy: true,//是否使用高精度定位，默认:true
             timeout: 10000,          //超过10秒后停止定位，默认：无穷大
-            buttonOffset: new AMap.Pixel(10, 20),//定位按钮与设置的停靠位置的偏移量，默认：Pixel(10, 20)
+            buttonOffset: new AMap.Pixel(14, 130),//定位按钮与设置的停靠位置的偏移量，默认：Pixel(10, 20)
             zoomToAccuracy: true,      //定位成功后调整地图视野范围使定位位置及精度范围视野内可见，默认：false
             buttonPosition:'RB'
         });
@@ -453,12 +488,14 @@
              str.push('精度：' + data.accuracy + ' 米');
         }//如为IP精确定位结果则没有精度信息
         str.push('是否经过偏移：' + (data.isConverted ? '是' : '否'));
-        document.getElementById('tip').innerHTML = str.join('<br>');
-    }
+        }
     //解析定位错误信息
     function onError(data) {
         document.getElementById('tip').innerHTML = '定位失败';
     }
+    
+    
+    
     
     
     
@@ -489,6 +526,74 @@
         placeSearch.setCity(e.poi.adcode);
         placeSearch.search(e.poi.name);  //关键字查询查询
     }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    //拖拽地图选取位置  
+    //加载PositionPicker，loadUI的路径参数为模块名中 'ui/' 之后的部分
+    AMapUI.loadUI(['misc/PositionPicker'], function(PositionPicker) {
+     
+        var positionPicker = new PositionPicker({
+            mode: 'dragMap',//设定为拖拽地图模式，可选'dragMap'、'dragMarker'，默认为'dragMap'
+            map: map,//依赖地图对象
+            iconStyle: { //自定义外观
+                url: '//webapi.amap.com/ui/1.0/assets/position-picker2.png',
+                ancher: [24, 40],
+                size: [35, 35]
+            }
+        }); 
+        //开启拖拽选址
+        //当拖拽结束后，拖拽选址组件会进行服务查询获得所选位置的地址、周边信息等数据，如果获取成功，将触发success事件，否则将触发fail事件。
+        positionPicker.on('success', function(positionResult) {
+            document.getElementById('tipinput1').value = positionResult.nearestPOI;
+        });
+        positionPicker.on('fail', function(positionResult) {
+            document.getElementById('tipinput2').value = ' ';
+        });
+        var startButton = document.getElementById('map-origin');
+        var stopButton = document.getElementById('map-destination');
+
+       	AMap.event.addDomListener(startButton, 'click', function() {
+
+            if(k%2==0){
+            	k++;
+             	positionPicker.start(map.getBounds().getSouthWest())	
+            }else{
+            	k++;
+            	positionPicker.stop();
+            }
+      	
+        })
+        
+        map.addControl(new AMap.ToolBar({
+            liteStyle: true
+        }))
+        positionPicker.stop();
+     
+    });
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
 </script>
 	
