@@ -126,6 +126,27 @@
  		}
  	*/
  	
+ 	
+ 	
+ 	.info-title{
+            color: white;
+            font-size: 14px;
+            background-color: blue;
+            line-height: 26px;
+            padding: 0px 0 0 6px;
+            font-weight: lighter;
+            letter-spacing: 1px
+        }
+        .info-content{
+            padding: 4px;
+            color: #666666;
+            line-height: 23px;
+            font: 12px Helvetica, 'Hiragino Sans GB', 'Microsoft Yahei', '微软雅黑', Arial;
+        }
+        .info-content img{
+            float: left;
+            margin: 3px;
+        }
   </style>
 <link rel='stylesheet' href='./static/css/style.css'>
 </head> 
@@ -424,7 +445,7 @@
 
 <script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.8
 	&key=0f3ed012ac3fff1585bc9aca91462875
-	&plugin=AMap.Autocomplete,AMap.PlaceSearch,AMap.ToolBar"></script> 
+	&plugin=AMap.Autocomplete,AMap.PlaceSearch,AMap.ToolBar,AMap.AdvancedInfoWindow"></script> 
 <script src="./static/js/jquery-1.12.4.js"></script>
 <script src="./static/js/shop_lang_cn.js"></script>
 <script src="./static/js/style.js"></script>
@@ -459,7 +480,8 @@
     //加载地图，调用浏览器定位服务
     map = new AMap.Map('container',{
         zoom: 16,
-        resizeEnable: true
+        resizeEnable: true,
+        isHotspot: true
     });
     	
     	
@@ -577,13 +599,34 @@
         map.addControl(new AMap.ToolBar({
             liteStyle: true
         }))
-        
-     
     });
     
     
-    
-    
+	//地图热点
+    var placeSearch = new AMap.PlaceSearch();  //构造地点查询类
+    var infoWindow=new AMap.AdvancedInfoWindow({});
+    map.on('hotspotclick', function(result) {
+        placeSearch.getDetails(result.id, function(status, result) {
+            if (status === 'complete' && result.info === 'OK') {
+                placeSearch_CallBack(result);
+            }
+        });
+    });
+    //回调函数
+    function placeSearch_CallBack(data) { //infoWindow.open(map, result.lnglat);
+        var poiArr = data.poiList.pois;
+        var location = poiArr[0].location;
+        infoWindow.setContent(createContent(poiArr[0]));
+        infoWindow.open(map,location);
+    }
+    function createContent(poi) {  //信息窗体内容
+        var s = [];
+        s.push('<div class="info-title">'+poi.name+'</div><div class="info-content">'+"地址：" + poi.address);
+        s.push("电话：" + poi.tel);
+        s.push("类型：" + poi.type);
+        s.push('<div>');
+        return s.join("<br>");
+    }
   
     
     
