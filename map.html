@@ -465,7 +465,7 @@
 
 
     	
-    	//定位服务
+    //定位服务
     map.plugin('AMap.Geolocation', function() {//定位按钮
         geolocation = new AMap.Geolocation({
             enableHighAccuracy: true,//是否使用高精度定位，默认:true
@@ -559,23 +559,21 @@
         });
         var startButton = document.getElementById('map-origin');
         var stopButton = document.getElementById('map-destination');
-
+		positionPicker.stop();
        	AMap.event.addDomListener(startButton, 'click', function() {
-
             if(k%2==0){
             	k++;
-             	positionPicker.start(map.getBounds().getSouthWest())	
+             	positionPicker.start(map.getBounds().getSouthWest());	
             }else{
             	k++;
             	positionPicker.stop();
             }
-      	
         })
         
         map.addControl(new AMap.ToolBar({
             liteStyle: true
         }))
-        positionPicker.stop();
+        
      
     });
     
